@@ -1,22 +1,7 @@
 $('#heroImageHome').parallax({ imageSrc: 'public/images/homeBoard2.jpg' });
-//$('#heroImageHome').parallax({ imageSrc: 'https://theultralinx.com/.image/MTM3OTE1NzAxMDE2NjY4MDEx/tumblr_o1itgoo0wf1u9ooogo1_500gif.gif' });
-
-
 
 $(document).ready(function(){
-	
-	
 
-	
-	/*
-	$(".menuIcon").click(function() {
-		$(this).toggleClass('active');
-		//$(".pageWrap").toggleClass("changePageWrap");
-		$(".menuIcon").toggleClass("changeMenuIcon");
-		$(".navigation").toggleClass("changeNavigation");
-	});
-	*/
-	
 	
 	$(".navigation").hover(function() {
 		$(this).toggleClass('active');
