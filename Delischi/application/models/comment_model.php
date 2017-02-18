@@ -8,6 +8,14 @@ class Comment_model extends CI_Model {
     parent::__construct();
 
   }
+	
+	
+	public function get_total_comments() {
+		$query = $this->db->query("select count(*) as totalcomments from comment");
+		if($query->num_rows()>0) {
+      return $query->result();
+    }
+	}
 
 
   public function add_comment($comment) {

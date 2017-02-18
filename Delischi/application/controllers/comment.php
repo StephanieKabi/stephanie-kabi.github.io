@@ -75,6 +75,7 @@ class Comment extends CI_Controller {
     // 5. Copy the image to 'images' directory in server
     if (isset($_FILES['image'])) {
       $uploaded_file_name = $_FILES[ 'image' ][ 'name' ];
+      //$file_path = base_url()."uploadedImages/dish/".$uploaded_file_name;
       $file_path = "C:/wamp64/www/Delischi/uploadedImages/dish/".$uploaded_file_name;
       move_uploaded_file( $_FILES['image']['tmp_name'], $file_path );
     }

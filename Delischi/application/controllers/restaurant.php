@@ -12,9 +12,49 @@ class Restaurant extends CI_Controller {
 
  	function index() {}
 	
+	
+	public function print_admin_dashboard() {
+		$userid = $this->session->userdata('logged_in_user_id');
+    $restaurant = $this->restaurant_model->get_restaurant($userid);
+    $opinion_stats_php = $this->dish_model->get_sentiment_stats($restaurant);
+    $opinion_stats_json = json_encode($opinion_stats_php);
+    $opinion_stats = '{"stats":['.$opinion_stats_json.']}';
+		$menu_items_stats_php = $this->dish_model->get_menu_items_stats($restaurant);
+		$menu_items_stats_json = json_encode($menu_items_stats_php);
+		$menu_items_stats = '{"stats":['.$menu_items_stats_json.']}';
+    $data = array(
+      'page_heading' => 'Dashboard',
+      'user' => $this->user_model->get_specific_user($userid),
+      'restaurant' => $restaurant,
+      'mentions' => $this->dish_model->get_number_dishes_mentioned($restaurant),
+      'comments_number' => $this->comment_model->get_number_comments($restaurant),
+      'opinion_stats' => $opinion_stats,
+			'popularity_short' => $this->dish_model->get_popularity_short($restaurant),
+			'comments_short' => $this->dish_model->get_comments_short($restaurant),
+			'menu_items_stats_php' => $menu_items_stats_php,
+			'currentPage' => 'business_dashboard'
+		);
+    $htmlPart1 = $this->load->view('templates/header',$data,true);
+    $htmlPart2 = $this->load->view('business/dashboard',$data,true);
+    $htmlPart3 = $this->load->view('templates/footer',$data,true);
+		$html = $htmlPart1.$htmlPart2.$htmlPart3;
+		var_dump($html);
+		//this the the PDF filename that user will get to download
+		$pdfFilePath = "output_pdf_name.pdf";
+		if (file_exists($pdfFilePath) == FALSE) {
+			//load mPDF library
+			$this->load->library('m_pdf');
+			//generate the PDF from the given html
+			$this->m_pdf->pdf->WriteHTML($html);
+			//download it.
+			$this->m_pdf->pdf->Output($pdfFilePath, "D");  
+		}
+	}
+	
 
   public function dashboard() {
     if(isset($_SESSION['logged_in_user_id'])) {
+			
       $userid = $this->session->userdata('logged_in_user_id');
       $restaurant = $this->restaurant_model->get_restaurant($userid);
 			
@@ -26,9 +66,6 @@ class Restaurant extends CI_Controller {
 			$menu_items_stats_json = json_encode($menu_items_stats_php);
 			$menu_items_stats = '{"stats":['.$menu_items_stats_json.']}';
 		
-			
-			
-
       $data = array(
         'page_heading' => 'Dashboard',
         'user' => $this->user_model->get_specific_user($userid),
@@ -44,6 +81,7 @@ class Restaurant extends CI_Controller {
       $this->load->view('templates/header',$data);
       $this->load->view('business/dashboard',$data);
       $this->load->view('templates/footer',$data);
+			
     }
     else {
       redirect('index.php/login');

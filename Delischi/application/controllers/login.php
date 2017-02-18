@@ -27,6 +27,77 @@ class Login extends CI_Controller {
    }
 
  }
+	
+	
+	function loginWithGoogle() {
+	/*
+		require_once APPPATH.'third_party/google-api-php-client-2.1.1/vendor/autoload.php';
+		// Get $id_token via HTTPS POST.
+		$client = new Google_Client(['client_id' => $CLIENT_ID]);
+		$payload = $client->verifyIdToken($id_token);
+		if ($payload) {
+			$userid = $payload['sub'];
+			// If request specified a G Suite domain:
+			//$domain = $payload['hd'];
+			redirect('home');
+		}
+		else {
+			// Invalid ID token
+		}
+		*/
+		
+		// Include two files from google-php-client library in controller
+		include_once APPPATH."third_party/google-api-php-client-2.1.1/src/Google/Client.php";
+		include_once APPPATH."third_party/google-api-php-client-2.1.1/src/Google/Service/Oauth2.php";
+
+		// Store values in variables from project created in Google Developer Console
+		$client_id = '280179834253-f2cqdttlkei6vdu04q8lnlqjh5mt2u6l.apps.googleusercontent.com';
+		$client_secret = '38RWxEsoP24-23WLhFpPQ067';
+		$redirect_uri = 'http://localhost/ci_google_oauth/';
+		$simple_api_key = 'AIzaSyD8g5fnRSZuiZ1HUfIDNnCWLbl3W1kiFqc';
+
+		// Create Client Request to access Google API
+		$client = new Google_Client();
+		$client->setApplicationName("Delischi");
+		$client->setClientId($client_id);
+		$client->setClientSecret($client_secret);
+		$client->setRedirectUri($redirect_uri);
+		$client->setDeveloperKey($simple_api_key);
+		$client->addScope("https://www.googleapis.com/auth/userinfo.email");
+		
+		// Send Client Request
+		$objOAuthService = new Google_Service_Oauth2($client);
+		
+		// Start session
+		session_start();
+
+		// Add Access Token to Session
+		if (isset($_GET['code'])) {
+		$client->authenticate($_GET['code']);
+		$_SESSION['access_token'] = $client->getAccessToken();
+		header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
+		}
+
+		// Set Access Token to make Request
+		if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
+		$client->setAccessToken($_SESSION['access_token']);
+		}
+
+		// Get User Data from Google and store them in $data
+		if ($client->getAccessToken()) {
+			$userData = $objOAuthService->userinfo->get();
+			$data['userData'] = $userData;
+			$_SESSION['access_token'] = $client->getAccessToken();
+		}
+		else {
+			$authUrl = $client->createAuthUrl();
+			$data['authUrl'] = $authUrl;
+		}
+		// Load view and send values stored in $data
+		$this->load->view('google_authentication', $data);
+
+		
+	}
 
 
  function check_login() {
@@ -80,7 +151,7 @@ class Login extends CI_Controller {
 				 $this->session->set_flashdata('welcomeMsg', 'Welcome, '.$logged_in_user_details->firstname.'!' );
 
 				 if ($session_data['usertype']=="Administrator") {
-					 redirect('index.php/user/profilea');
+					 redirect('index.php/admin/dashboard');
 				 }
 				 elseif ($session_data['usertype']=="Restaurant Owner") {
 					 redirect('index.php/restaurant/dashboard');

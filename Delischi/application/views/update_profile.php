@@ -7,6 +7,7 @@
     <section class="panel">
 
       <div class="panel-heading">
+				<br>
         <h2><?php echo $panel_title_1; ?></h2>
       </div>
 

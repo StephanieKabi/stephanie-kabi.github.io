@@ -8,11 +8,18 @@ $(document).ready(function(){
 	
 
 	
-	
+	/*
 	$(".menuIcon").click(function() {
 		$(this).toggleClass('active');
 		//$(".pageWrap").toggleClass("changePageWrap");
 		$(".menuIcon").toggleClass("changeMenuIcon");
+		$(".navigation").toggleClass("changeNavigation");
+	});
+	*/
+	
+	
+	$(".navigation").hover(function() {
+		$(this).toggleClass('active');
 		$(".navigation").toggleClass("changeNavigation");
 	});
 	
@@ -49,6 +56,20 @@ $(document).ready(function(){
 		}
 		else {
 			$('#scrollUpDiv').hide();
+		}
+	});
+	// Make down arrow appear when screen scrolls down
+	$('#scrollUpDivHome').hide();
+	$(window).scroll(function() {
+		//$totalDocHeight = $(document).height();
+		$visibleDocHeight = $("#items-grid").height();
+		$scrollHeight = $("#items-grid").scrollTop();
+		$minimalScrollable = $visibleDocHeight * 0.5;
+		if($scrollHeight >= $minimalScrollable) {
+			$('#scrollUpDivHome').show();
+		}
+		else {
+			$('#scrollUpDivHome').hide();
 		}
 	});
 	

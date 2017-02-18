@@ -179,7 +179,13 @@ if(isset($_SESSION['logged_in_user_id'])) {
 		<div class="row">
 			
 			<h4>Dishes Served</h4>
-	
+			
+			<?php if(!isset($menuItems)) { ?>
+			
+			<p><?php echo $restaurant->restaurantname; ?> has not recorded dishes here yet.</p>
+			
+			<?php } else { ?>
+			
 			<table class="u-full-width">
         <thead>
 					<tr>
@@ -198,9 +204,12 @@ if(isset($_SESSION['logged_in_user_id'])) {
 					<?php } ?>
 				</tbody>
 			</table>
+				
+			<?php } ?>
+			
 		</div>
 
-			<div class="row">
+			<div class="row" style="margin-bottom:100px">
 				
 				<br>
 				

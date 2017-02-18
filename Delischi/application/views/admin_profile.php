@@ -6,153 +6,409 @@ if(isset($_SESSION['logged_in_user_id'])) {
 }
 ?>
 
-<script src="<?php echo base_url(); ?>public/js/chartist.min.js"></script>
-<script src="<?php echo base_url(); ?>public/js/chartist-plugin-axistitle.js"></script>
-<script src="<?php echo base_url(); ?>public/js/chartist-plugin-fill-donut.min.js"></script>
+<!-- Load the library -->
+
+<script>
+(function(w,d,s,g,js,fjs){
+  g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(cb){this.q.push(cb)}};
+  js=d.createElement(s);fjs=d.getElementsByTagName(s)[0];
+  js.src='https://apis.google.com/js/platform.js';
+  fjs.parentNode.insertBefore(js,fjs);js.onload=function(){g.load('analytics')};
+}(window,document,'script'));
+</script>
+
 
 	<div id="top"></div>
 
   <div class="container">
 		
 		<section id="adminFixedImage">
-	 <div id="adminHeading">
-		 <h1>Admin</h1>
-	 </div>
-	</section>
-
-    <div class="row">
-
-			<div class="three columns">
-
-        <div class="row">
-
-          <section id="accountPanel" class="panel">
-
-            <?php
-            echo " <img class='account-panel-avatar' src='".base_url()."uploadedImages/profile/".$user->imagepath."'alt='".$user->imagepath."'> ";
-						
-						
-            ?>
-						
-						<div id="accountPanelImgBlur"></div>
-
-            <div class="account-panel-text">
-							
-							<div id="accPanelDiv">
-
-								<div class="container">
-
-									<br>
-									<div class="row">
-										<center>
-											<div class="row"><h5><?php echo $user->firstname." ".$user->lastname; ?></h5></div>
-										<center>
-									</div>
-
-									<div class="row">
-										<center>
-											<button class="button-default" type="button" onclick='location.href="<?php echo base_url(); ?>index.php/user/update_profile"' value="<?php echo $user->userid; ?>" id="update_profile_btn" name="update_profile_btn">Update</button>
-										</center>
-									</div>
-
-								</div>
-
-							</div>
-
-            </div>
-
-          </section>
-
-          <?php 
-					if($this->session->userdata('usertype')=='Restaurant Owner'){
-						echo "
-						<div id='restaurantTextFooter' class='blue'>
-							<i class='material-icons md-18 app-menu' style='padding-right:5px'>error_outline</i>
-							<p>To update your business information, please visit Google Maps.<br>Find out more <a href='https://support.google.com/business/answer/6174435?hl=en' target='_blank'>here</a>.</p>
-						</div>
-						";
-					}
-					else if($this->session->userdata('usertype')=='Food Writer'){
-            echo '
-            <div class="card">
-              <br>
-              <span>
-                <i class="material-icons red">restaurant</i> <br> <small><h7>EATEN</h7></small> <h4>'.$number_dishes_eaten.'</h4>
-              </span>
-              <span>
-								<i class="material-icons red">place</i> <br> <small><h7>VISITED</h7></small> <h4>'.$number_places_visited.'</h4>
-              </span>
-              <span>
-								<i class="material-icons red">restaurant_menu</i> <br> <small><h7>CUISINES</h7></small> <h4>'.$number_cuisines_eaten.'</h4>
-              </span>
-            </div>
-            ';
-          }
-          ?>
-
-        </div>
-
-      </div>
-
-<div class="nine columns">
-
-	<section class="panel" id="usersPanel">
-					
-		<h2>Users</h2>
-		<div class="adminUserCards">
-			<?php 
-			$users_per_group = (array) $users_per_group;
-			for($p=0; $p<count($users_per_group); $p++) {
-				$users_per_group[$p] = (array) $users_per_group[$p];
-			?>
-			<div class="four columns">
-				<div class="card card-blue">
-					<span class="card-number"><?php echo $users_per_group[$p]['totalusers'] ?></span>
-					<span class="card-title">
-					<?php 
-					echo $users_per_group[$p]['usertype']; 
-					if ($users_per_group[$p]['totalusers']>1){
-						echo "s";
-					} 
-					?>
-					</span>
+		 <div id="adminHeading">
+			 <h1>Admin</h1>
+		 </div>
+		</section>
+		
+		<h3>Summary</h3>
+		
+		<header>
+			<div class="row">
+				<div id="embed-api-auth-container"></div>
+			</div>
+			<div class="row">
+				<div class="four columns">
+					<div id="view-selector-container"></div>
+				</div>
+				<div class="four columns">
+					<div id="view-name"></div>
+				</div>
+				<div class="four columns">
+					<div id="active-users-container"></div>
 				</div>
 			</div>
-			<?php
-			}
-			?>
-		</div>
+		</header>
 		
-		<br>
+		
+		<?php 
+		$totaldishes = (array) $totaldishes;
+		for($p=0; $p<count($totaldishes); $p++) {
+			$totaldishes[$p] = (array) $totaldishes[$p];
+		}
+		$totalrestaurants = (array) $totalrestaurants;
+		for($p=0; $p<count($totalrestaurants); $p++) {
+			$totalrestaurants[$p] = (array) $totalrestaurants[$p];
+		}
+		$totalusers = (array) $totalusers;
+		for($p=0; $p<count($totalusers); $p++) {
+			$totalusers[$p] = (array) $totalusers[$p];
+		}
+		$totalcomments = (array) $totalcomments;
+		for($p=0; $p<count($totalcomments); $p++) {
+			$totalcomments[$p] = (array) $totalcomments[$p];
+		}
+		?>
+		
+		
+		<section id="adminStatsSummary">
+			<div class="row">
+				<div class="three columns">
+					<div class="card card-black">
+						<span class="card-number"><?php echo $totaldishes[0]['totaldishes'] ?></span>
+						<span class="card-title">
+						<?php 
+						echo "Dish";
+						if ($totaldishes[0]['totaldishes']>1){
+							echo "es";
+						} 
+						?>
+						</span>
+					</div>
+				</div>
+				<div class="three columns">
+					<div class="card card-black">
+						<span class="card-number"><?php echo $totalrestaurants[0]['totalrestaurants'] ?></span>
+						<span class="card-title">
+						<?php 
+						echo "Business";
+						if ($totalrestaurants[0]['totalrestaurants']>1){
+							echo "es";
+						} 
+						?>
+						</span>
+					</div>
+				</div>
+				<div class="three columns">
+					<div class="card card-black">
+						<span class="card-number"><?php echo $totalusers[0]['totalusers'] ?></span>
+						<span class="card-title">
+						<?php 
+						echo "User";
+						if ($totalusers[0]['totalusers']>1){
+							echo "s";
+						} 
+						?>
+						</span>
+					</div>
+				</div>
+				<div class="three columns">
+					<div class="card card-black">
+						<span class="card-number"><?php echo $totalcomments[0]['totalcomments'] ?></span>
+						<span class="card-title">
+						<?php 
+						echo "Comment";
+						if ($totalcomments[0]['totalcomments']>1){
+							echo "s";
+						} 
+						?>
+						</span>
+					</div>
+				</div>
+			</div>
+			<br>
+		</section>
+		
+		<section id="sessionSummary">
+			
+			<div class="row">
+				<div class="four columns">
+					<div class="Chartjs">
+						<h4>Types of Visitors</h4>
+						<figure class="Chartjs-figure" id="totalUsersContainer"></figure>
+						<ol class="Chartjs-legend" id="legend-1-container"></ol>
+					</div>
+				</div>
+				<div class="four columns">
+					<div class="Chartjs">
+						<h4>Total Sessions</h4>
+						<h6>This year</h6>
+						<figure class="Chartjs-figure" id="totalSessionsContainer"></figure>
+						<ol class="Chartjs-legend" id="legend-2-container"></ol>
+					</div>
+				</div>
+				<div class="four columns">
+					<div class="Chartjs">
+						<h4>New Sessions</h4>
+						<h6>This year</h6>
+						<figure class="Chartjs-figure" id="newSessionsContainer"></figure>
+						<ol class="Chartjs-legend" id="legend-3-container"></ol>
+					</div>
+				</div>
+			</div>
+			
+			<br>
+			
+		</section>
+		
+		<section id="otherSummary">
+			
+			<div class="row">
+				<div class="six columns">
+					<div class="Chartjs">
+						<h4>Top Browsers</h4>
+						<figure class="Chartjs-figure" id="topBrowsersContainer"></figure>
+						<ol class="Chartjs-legend" id="legend-4-container"></ol>
+					</div>
+				</div>
+				<div class="six columns">
+					<div class="Chartjs">
+						<h4>Top User Locations</h4>
+						<figure class="Chartjs-figure" id="topLocationsContainer"></figure>
+						<ol class="Chartjs-legend" id="legend-5-container"></ol>
+					</div>
+				</div>
+			</div>
+			
+			<br>
+			
+			<div class="row">
+				<div class="six columns">
+					<div class="Chartjs">
+						<h4>Most Visited Pages</h4>
+						<figure class="Chartjs-figure" id="mostViewedPagesContainer"></figure>
+						<ol class="Chartjs-legend" id="legend-6-container"></ol>
+					</div>
+				</div>
+				<div class="six columns">
+					<div class="Chartjs">
+						<h4>Least Visited Pages</h4>
+						<figure class="Chartjs-figure" id="leastViewedPagesContainer"></figure>
+						<ol class="Chartjs-legend" id="legend-7-container"></ol>
+					</div>
+				</div>
+			</div>
+			
+			<br>
+			
+		</section>
+		
+		<section id="fullReport" style="display:none">
+			<div id="adminReport" class="card card-black">
+				<p>For more information, visit <a target="_blank" href="https://analytics.google.com/analytics/web/">Google Analytics</a>.</p>
+			</div>
+		</section>
 
-		<table class="u-full-width">
-			<thead>
-				<tr>
-					<th></th>
-					<th>Name</th>
-					<th>Email</th>
-					<th>Account</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-			<?php foreach ($allusers as $row) { ?>
-				<tr>
-					<td><img class="userlist-img" src='<?php echo base_url() ?>uploadedImages/profile/<?php echo $row->imagepath ?>'></td>
-					<td><?php echo $row->firstname ?> <?php echo $row->lastname ?></td>
-					<td><?php echo $row->emailaddress ?></td>
-					<td><?php echo $row->usertype ?></td>
-					<td>
-						<a id="<?php echo $row->userid ?>" onclick="javascript:deleteConfirm('<?php echo base_url() ?>index.php/user/admin_delete_user?uid=<?php echo $row->userid ?>')"><i class="material-icons not-menu red md-24">delete_forever</i></a>
-					</td>
-				</tr>
-				<?php } ?>
-			</tbody>
-		</table>
+
+	<script>
+	gapi.analytics.ready(function() {
+
+		/**
+		 * Authorize the user immediately if the user has already granted access.
+		 * If no access has been created, render an authorize button inside the
+		 * element with the ID "embed-api-auth-container".
+		 */
+		var CLIENT_ID = '280179834253-p6cqjqoa4tqndrh8hm6k863valkqthhd.apps.googleusercontent.com';
+		gapi.analytics.auth.authorize({
+			container: 'embed-api-auth-container',
+			clientid: CLIENT_ID
+		});
+
+
+		/**
+		 * Create a new ViewSelector instance to be rendered inside of an
+		 * element with the id "view-selector-container".
+		 */
+		var viewSelector = new gapi.analytics.ViewSelector({
+			container: 'view-selector-container'
+		});
+
+		// Render the view selector to the page.
+		viewSelector.execute();
+
 		
-	</section>
-	
-	
+		
+
+		/**
+		 * Create a new DataChart instance with the given query parameters
+		 * and Google chart options. It will be rendered inside an element
+		 * with the id "chart-container".
+		 */
+		var allUsersChart = new gapi.analytics.googleCharts.DataChart({
+			query: {
+				metrics: 'ga:users',
+				dimensions: 'ga:userType',
+				'start-date': '2016-11-01',
+				'end-date': 'today'
+			},
+			chart: {
+				container: 'totalUsersContainer',
+				type: 'PIE',
+				options: {
+					width: '100%'
+				}
+			}
+		});
+
+
+		/**
+		 * Create a new DataChart instance with the given query parameters
+		 * and Google chart options. It will be rendered inside an element
+		 * with the id "chart-container".
+		 */
+		var sessionsChart = new gapi.analytics.googleCharts.DataChart({
+			query: {
+				metrics: 'ga:sessions',
+				dimensions: 'ga:date',
+				'start-date': '2017-01-01',
+				'end-date': 'today'
+			},
+			chart: {
+				container: 'totalSessionsContainer',
+				type: 'LINE',
+				options: {
+					width: '100%'
+				}
+			}
+		});
+
+
+		/**
+		 * Create a new DataChart instance with the given query parameters
+		 * and Google chart options. It will be rendered inside an element
+		 * with the id "chart-container".
+		 */
+		var newSessionsChart = new gapi.analytics.googleCharts.DataChart({
+			query: {
+				metrics: 'ga:percentNewSessions',
+				dimensions: 'ga:date',
+				'start-date': '2017-01-01',
+				'end-date': 'today'
+			},
+			chart: {
+				container: 'newSessionsContainer',
+				type: 'LINE',
+				options: {
+					width: '100%'
+				}
+			}
+		});
+
+
+		/**
+		 * Create a new DataChart instance with the given query parameters
+		 * and Google chart options. It will be rendered inside an element
+		 * with the id "chart-container".
+		 */
+		var mostViewedPagesChart = new gapi.analytics.googleCharts.DataChart({
+			query: {
+				metrics: 'ga:pageviews',
+				dimensions: 'ga:pagePath',
+				'start-date': '2016-11-01',
+				'end-date': 'today',
+				'sort': '-ga:pageviews',
+				'max-results': 5
+			},
+			chart: {
+				container: 'mostViewedPagesContainer',
+				type: 'TABLE',
+				options: {
+					width: '100%'
+				}
+			}
+		});
+		var leastViewedPagesChart = new gapi.analytics.googleCharts.DataChart({
+			query: {
+				metrics: 'ga:pageviews',
+				dimensions: 'ga:pagePath',
+				'start-date': '2016-11-01',
+				'end-date': 'today',
+				'sort': 'ga:pageviews',
+				'max-results': 5
+			},
+			chart: {
+				container: 'leastViewedPagesContainer',
+				type: 'TABLE',
+				options: {
+					width: '100%'
+				}
+			}
+		});
+
+
+		/**
+		 * Create a new DataChart instance with the given query parameters
+		 * and Google chart options. It will be rendered inside an element
+		 * with the id "chart-container".
+		 */
+		var browsersChart = new gapi.analytics.googleCharts.DataChart({
+			query: {
+				metrics: 'ga:pageviews',
+				dimensions: 'ga:browser',
+				'start-date': '2016-11-01',
+				'end-date': 'today',
+				'sort': '-ga:pageviews',
+				'max-results': 5
+			},
+			chart: {
+				container: 'topBrowsersContainer',
+				type: 'PIE',
+				options: {
+					width: '100%'
+				}
+			}
+		});
+
+
+		/**
+		 * Create a new DataChart instance with the given query parameters
+		 * and Google chart options. It will be rendered inside an element
+		 * with the id "chart-container".
+		 */
+		var locationsChart = new gapi.analytics.googleCharts.DataChart({
+			query: {
+				//'max-results': 10,
+				metrics: 'ga:sessions',
+				dimensions: 'ga:city',
+				'start-date': '2016-11-01',
+				'end-date': 'today',
+				'sort': '-ga:sessions'
+			},
+			chart: {
+				container: 'topLocationsContainer',
+				type: 'BAR',
+				options: {
+					width: '100%'
+				}
+			}
+		});
+		
+		
+        
+
+
+		/**
+		 * Render the dataChart on the page whenever a new view is selected.
+		 */
+		viewSelector.on('change', function(ids) {
+			allUsersChart.set({query: {ids: ids}}).execute();
+			sessionsChart.set({query: {ids: ids}}).execute();
+			newSessionsChart.set({query: {ids: ids}}).execute();
+			mostViewedPagesChart.set({query: {ids: ids}}).execute();
+			leastViewedPagesChart.set({query: {ids: ids}}).execute();
+			browsersChart.set({query: {ids: ids}}).execute();
+			locationsChart.set({query: {ids: ids}}).execute();
+		});
+
+	});
+	</script>
 	
 	<div id="scrollUpDiv" class="row">
 		<div id="scrollUp">
@@ -161,10 +417,6 @@ if(isset($_SESSION['logged_in_user_id'])) {
 			</a>
 		</div>
 	</div>
-
-</div>
-
-</div>
 
 </div>
 
