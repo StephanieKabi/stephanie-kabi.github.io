@@ -10,6 +10,14 @@ class Restaurant_model extends CI_Model {
   }
 	
 	
+	public function get_total_restaurants() {
+		$query = $this->db->query("select count(*) as totalrestaurants from restaurant");
+		if($query->num_rows()>0) {
+      return $query->result();
+    }
+	}
+	
+	
 	public function get_restaurant_explore($restaurantid) {
     $this->db->from('restaurant');
     $this->db->where('restaurantid', $restaurantid);

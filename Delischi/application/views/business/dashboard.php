@@ -29,11 +29,15 @@ else {}
 		 </div>
 	 </section>
 	 
+	 <!--
+	 
 	 <div class="row">
 		 <div class="container" style="text-align:right;">
-		 	<button id="printDashboardBtn" class="button-primary"><i class="material-icons white">print</i>Print</button>
+		 	<button id="printDashboardBtn" class="button-primary" onclick="location.href='<?php //echo base_url() ?>index.php/restaurant/print_admin_dashboard'"><i class="material-icons white">print</i>Print</button>
 		 </div>
 	 </div>
+
+-->
 	 
 	 <div id="printableDivDashboard">
 	 

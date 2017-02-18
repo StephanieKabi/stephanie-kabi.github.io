@@ -119,6 +119,16 @@ if(isset($_SESSION['logged_in_user_id'])) {
 		 </div>
 		 
 	 </div>
+	 
+	 <div class="container">
+	<div id="scrollUpDivHome" class="row">
+		<div id="scrollUp">
+			<a href="#items-grid" class="smoothScroll">
+				<i class="material-icons">keyboard_arrow_up</i>
+			</a>
+		</div>
+	</div>
+</div>
 
 </section>
 

@@ -28,11 +28,13 @@ if(isset($_SESSION['logged_in_user_id'])) {
 			 <h4 class="separator">Search results for "<?php echo $this->session->flashdata('searchTerm'); ?>"</h4>
 		 </div>
 	
+		 <?php if(isset($searchTermResultsFlash)) { ?>
       <ul id="filters" class="filters u-full-width">
 				<li class="active" data-sort-value="original-order"> <a href="#">Original&nbsp;Order</a> </li>
 				<li data-sort-value="dish"> <a href="#">Dish</a> </li>
 				<li data-sort-value="restaurant"> <a href="#">Restaurant</a> </li>
       </ul>
+		 <?php } ?>
 		 
 		 </div>
 
@@ -41,12 +43,9 @@ if(isset($_SESSION['logged_in_user_id'])) {
 			 <div class="row">
 				 <?php if(isset($searchTermResultsFlash)) { ?>
 	
-					
-
 				 <ul id="items" class="items isotope js-isotope u-cf">
 
 					 <?php 
-	
 					 $searchTermResultsFlash = (array) $searchTermResultsFlash;
 					 for($p=0; $p<count($searchTermResultsFlash); $p++) {
 						 $searchTermResultsFlash[$p] = (array) $searchTermResultsFlash[$p];

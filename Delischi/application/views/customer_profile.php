@@ -15,7 +15,7 @@ if(isset($_SESSION['logged_in_user_id'])) {
 			<div class="panel-body">
 				
 				<div class="container">
-					
+					<br>
 					<h2><?php echo $panel_title_1; ?></h2>
 					
 					<div class="row" style="clear:both;">

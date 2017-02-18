@@ -17,15 +17,7 @@ class User extends CI_Controller {
     }
 
   }
-	
-	
-	public function admin_delete_user() {
-		if (isset($_GET['uid'])){
-			$userid = $_GET['uid'];
-      $this->user_model->delete_user($userid);
-			redirect('index.php/user/profilea');
-    }
-	}
+
 
 
   public function update_profile() {
@@ -139,28 +131,8 @@ class User extends CI_Controller {
   }
 
 
-  public function profilea() {
-    if(isset($_SESSION['logged_in_user_id'])) {
-      $userid = $this->session->userdata('logged_in_user_id');
-      $user = $this->user_model->get_specific_user($userid);
-      $data = array(
-      'page_heading' => 'Administrator',
-      'user' => $this->user_model->get_specific_user($userid),
-      'allusers' => $this->user_model->get_all_users(),
-			'users_per_group' => $this->user_model->get_users_per_group(),
-			'currentPage' => 'admin_profile'
-      );
-      $this->load->view('templates/header',$data);
-      $this->load->view('admin_profile',$data);
-      $this->load->view('templates/footer',$data);
-   }
-   else {
-     redirect('index.php/login');
-   }
-  }
-
-
   public function logout() {
+		unset($_SESSION['access_token']);
     $this->session->sess_destroy();
     redirect('','refresh'); //will redirect to default route, which is the "Home" controller
   }

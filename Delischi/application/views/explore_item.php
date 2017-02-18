@@ -38,22 +38,20 @@ if(isset($_SESSION['logged_in_user_id'])) {
 	
 	<div id="explorePageDivText">
 		
-		<div class="container">
+		<div class="explorePageDivTextContainer container">
 
 			<?php } ?>
 
 			<section id="exploreItemComments">
 				
 				<ul id="filters" class="filters u-full-width">
-					<li class="active"><a href="#" data-filter="*">All</a></li>
-					<li><a href="#" data-filter=".positive">Positive comments</a></li>
-					<li><a href="#" data-filter=".negative">Negative comments</a></li>
+					<li class="active"><a href="#" data-filter="*">All Comments</a></li>
+					<li><a href="#" data-filter=".positive">Positive</a></li>
+					<li><a href="#" data-filter=".negative">Negative</a></li>
 				</ul>
 				
 				<div id="reviewItems">
-				<?php 
-				foreach($explore_item_pt2 as $row) {
-				?>
+				<?php foreach($explore_item_pt2 as $row) { ?>
 					<p class="reviewItem <?php echo $row->sentimenttype ?>">
 						<span class="exploreProfileImg">
 							<img class="userlist-img" src="<?php echo base_url() ?>uploadedImages/profile/<?php echo $row->imagepath ?>">
@@ -70,10 +68,8 @@ if(isset($_SESSION['logged_in_user_id'])) {
 								<i class='material-icons app-menu md-18 red'>sentiment_very_dissatisfied</i>
 								<?php } ?>
 						</span>
-					</p>
-				<?php
-				}
-				?>
+					</p><br>
+				<?php } ?>
 				</div>
 			</section>
 			
@@ -82,15 +78,14 @@ if(isset($_SESSION['logged_in_user_id'])) {
 			<?php if(isset($explore_item_similars)) { ?>
 			
 			<section id="exploreItemSimilars">
-				<div class="container">
-				<h5>You might also like:</h5>
-					</div>
+				<div class="explorePageDivTextContainer container">
+				<h5 style="text-transform:none">You might like:</h5>
 				
 				<ul id="items" class="items isotope js-isotope u-cf">
 				 
 				 <?php foreach ($explore_item_similars as $row) { ?>
 					
-					<li class="four columns isotopeItem u-full-width">
+					<li class="four columns isotopeItem u-full-width <?php echo $row->dishtype ?>">
 						 <div class="exploreListItem">
 							 <figure>
 								 <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?php echo base_url() ?>uploadedImages/dish/<?php echo $row->imagename ?>" alt="" width="300" height="300">
@@ -98,25 +93,21 @@ if(isset($_SESSION['logged_in_user_id'])) {
 									 <img src="<?php echo base_url() ?>uploadedImages/dish/<?php echo $row->imagename ?>">
 								 </noscript>
 							 </figure>
-							 <!--
 							 <div class="explore_stats">
 								 <span>
-									 <span class="comments"><?php //echo $explore_dishes[$p]['totalcomments'] ?></span>
+									 <span class="comments"><?php echo $row->totalcomments ?></span>
 									 <i class='material-icons app-menu md-18'>chat_bubble_outline</i>
 								 </span>
 								 <span>
-									 <span class="likes"><?php //echo $explore_dishes[$p]['totallikes'] ?></span>
+									 <span class="likes"><?php echo $row->totallikes ?></span>
 									 <i class='material-icons app-menu md-18'>sentiment_very_satisfied</i>
 								 </span>
-								 <span style="display:none" class="dislikes"><?php //echo $explore_dishes[$p]['totaldislikes'] ?></span>
+								 <span style="display:none" class="dislikes"><?php //echo $row->totaldislikes ?></span>
 							 </div>
-								-->
 							 <div class="detail">
-								 <h5 class="dish"><?php echo $row->dishname ?></h5>
-								 <p class="restaurant"><?php echo $row->restaurantname ?></p>
-								 <a href="<?php echo base_url(); ?>index.php/explore/item?did=<?php echo $row->dishlistingid ?>">
-								 <button type="button">View</button>
-								 </a>
+								 <h5 class="dish"<small><?php echo $row->dishname ?></small></h5>
+								 <p class="restaurant"><?php echo $row->restaurantname ?>, <?php echo $row->vicinity ?></p>
+								 <button type="button" onclick="location.href='<?php echo base_url(); ?>index.php/explore/item?did=<?php echo $row->dishlistingid ?>'">View</button>
 							 </div>
 						 </div>
 					 </li>
@@ -124,6 +115,9 @@ if(isset($_SESSION['logged_in_user_id'])) {
 				 <?php } ?>
 			 
 			 </ul>
+					
+					
+				</div>
 				
 			</section>
 			

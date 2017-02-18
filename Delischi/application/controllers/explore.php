@@ -35,6 +35,8 @@ class Explore extends CI_Controller {
 	
 	
 	function search() {
+
+		$this->session->unset_tempdata('searchTermResults');
 		
 		$searchTerm = $this->input->post('exploreSearchInput');
 		$searchTermResults = $this->dish_model->get_explore_search($searchTerm);
@@ -45,7 +47,7 @@ class Explore extends CI_Controller {
 		}
 		else {
 			$this->session->set_flashdata('searchTerm', $searchTerm, 300);
-			$searchTermErrMsg = "Sorry, there are no results for ".$searchTerm.".";
+			$searchTermErrMsg = "Sorry, there are no results for '".$searchTerm."'.";
 			$this->session->set_flashdata('searchTermErr',$searchTermErrMsg);
 		}
 		
@@ -56,7 +58,7 @@ class Explore extends CI_Controller {
      else {
        $data = array(
          'page_heading' => "Results for $searchTerm",
-				 'currentPage' => 'search'
+				 'currentPage' => 'explore'
        );
 			 
 			$searchTermFlash = $this->session->tempdata('searchTerm');

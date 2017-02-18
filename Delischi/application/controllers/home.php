@@ -39,7 +39,7 @@ class Home extends CI_Controller {
        	$data['user'] = $this->user_model->get_specific_user($userid);
 			 
 				if ($usertype=="Administrator") {
-				 	redirect('index.php/user/profilea');
+				 	redirect('index.php/admin/dashboard');
 				}
 			 	elseif ($usertype=="Restaurant Owner") {
 					redirect('index.php/restaurant/dashboard');

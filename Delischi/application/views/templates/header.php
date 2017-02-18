@@ -33,6 +33,23 @@
 		
 		
 
+		
+		<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-91914775-1']);
+		_gaq.push(['_setDomainName', 'none']);
+		_gaq.push(['_setAllowLinker', 'true']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+		</script>
+
+		
+
   </head>
 
   <body> 
@@ -45,50 +62,44 @@
     }
     ?>
 
-		<div class="menuIcon">
-			<div class="bar <?php if($currentPage=='home') { echo 'white'; } else { echo 'black'; } ?>"></div>
-			<div class="bar <?php if($currentPage=='home') { echo 'white'; } else { echo 'black'; } ?>"></div>
-			<div class="bar <?php if($currentPage=='home') { echo 'white'; } else { echo 'black'; } ?>"></div>
-		</div>
     <nav class="navigation">
 			<?php  if(isset($_SESSION['logged_in_user_id'])) { ?>
 			<div id="navProfileImageDiv"><img id="navProfileImg" src="<?php echo base_url() ?>uploadedImages/profile/<?php echo $this->session->userdata('profile_image') ?>"></div>
 			<?php } ?>
       <ul class="main-navigation" role="navigation">
         <?php if(!(isset($_SESSION['logged_in_user_id']))) { ?>
-        <li><a href='<?php echo base_url() ?>' class="<?php if($currentPage=='home'){ echo 'current'; } ?>"> <span class='app-menu-name'>Home</span></a></li>
-        <li><a href='<?php echo base_url() ?>index.php/explore' class="<?php if($currentPage=='explore'){ echo'current'; } ?>"> <span class='app-menu-name'>Explore</span></a></li>
-        <li><a href='<?php echo base_url() ?>index.php/login' class="<?php if($currentPage=='login'){ echo'current'; } ?>"> <span class='app-menu-name'>Log In</span></a></li>
-        <li><a href='<?php echo base_url() ?>index.php/about' class="<?php if($currentPage=='about'){ echo'current'; } ?>"> <span class='app-menu-name'>About</span></a></li>
-        <li><a href='<?php echo base_url() ?>index.php/comment'> <span class='app-menu-name'>Rate a Dish</span></a></li>
+        <li><a href='<?php echo base_url() ?>' class="<?php if($currentPage=='home'){ echo 'current'; } ?>"><span class='app-menu-name'><i class="material-icons navIcon">home</i>Home</span></a></li>
+        <li><a href='<?php echo base_url() ?>index.php/explore' class="<?php if($currentPage=='explore'){ echo'current'; } ?>"><span class='app-menu-name'><i class="material-icons navIcon">whatshot</i>Explore</span></a></li>
+        <li><a href='<?php echo base_url() ?>index.php/login' class="<?php if($currentPage=='login'){ echo'current'; } ?>"> <span class='app-menu-name'><i class="material-icons navIcon">https</i>Log In</span></a></li>
+        <li><a href='<?php echo base_url() ?>index.php/about' class="<?php if($currentPage=='about'){ echo'current'; } ?>"> <span class='app-menu-name'><i class="material-icons navIcon">info_outline</i>About</span></a></li>
+        <li><a href='<?php echo base_url() ?>index.php/comment'><span class='app-menu-name'><i class="material-icons navIcon">rate_review</i>Rate a Dish</span></a></li>
         <?php }
         elseif(isset($_SESSION['logged_in_user_id'])) {
           if($usertype=="Food Writer") { ?>
-            <li><a href='<?php echo base_url() ?>index.php/user/profilec' class="<?php if($currentPage=='account'){ echo'current'; } ?>"> <span class='app-menu-name'>Account</span></a></li>
-            <li><a href='<?php echo base_url() ?>' class="<?php if($currentPage=='home'){ echo'current'; } ?>"> <span class='app-menu-name'>Home</span></a></li>
-            <li><a href='<?php echo base_url() ?>index.php/explore' class="<?php if($currentPage=='explore'){echo'current';} ?>"> <span class='app-menu-name'>Explore</span></a></li>
-            <li><a href='<?php echo base_url() ?>index.php/about' class="<?php if($currentPage=='about'){echo'current';} ?>"><span class='app-menu-name'>About</span></a></li>
-            <li><a href='<?php echo base_url() ?>index.php/user/logout'><span class='app-menu-name'>Log out</span></a></li>
+            <li><a href='<?php echo base_url() ?>index.php/user/profilec' class="<?php if($currentPage=='account'){ echo'current'; } ?>"><span class='app-menu-name'><i class="material-icons navIcon">account_circle</i>Account</span></a></li>
+            <li><a href='<?php echo base_url() ?>' class="<?php if($currentPage=='home'){ echo'current'; } ?>"> <span class='app-menu-name'><i class="material-icons navIcon">home</i>Home</span></a></li>
+            <li><a href='<?php echo base_url() ?>index.php/explore' class="<?php if($currentPage=='explore'){echo'current';} ?>"><span class='app-menu-name'><i class="material-icons navIcon">whatshot</i>Explore</span></a></li>
+        		<li><a href='<?php echo base_url() ?>index.php/about' class="<?php if($currentPage=='about'){ echo'current'; } ?>"> <span class='app-menu-name'><i class="material-icons navIcon">info_outline</i>About</span></a></li>
           <?php }
           elseif ($usertype=="Restaurant Owner") { ?>
-            <li><a href='<?php echo base_url() ?>index.php/restaurant/dashboard' class="<?php if($currentPage=='business_dashboard'){echo'current';} ?>"> <span class='app-menu-name'>Dashboard</span></a></li>
-            <li><a href='<?php echo base_url() ?>index.php/restaurant/reviews' class="<?php if($currentPage=='business_reviews'){echo'current';} ?>"> <span class='app-menu-name'>Reviews</span></a></li>
-            <li><a href='<?php echo base_url() ?>index.php/restaurant/menu' class="<?php if($currentPage=='menu'){echo'current';} ?>"> <span class='app-menu-name'>Menu</span></a></li>
-            <li><a href='<?php echo base_url() ?>index.php/restaurant/info' class="<?php if($currentPage=='info'){echo'current';} ?>"> <span class='app-menu-name'>Info</span></a></li>
-            <li><a href='<?php echo base_url() ?>index.php/user/logout'><span class='app-menu-name'>Log out</span></a></li>
+            <li><a href='<?php echo base_url() ?>index.php/restaurant/dashboard' class="<?php if($currentPage=='business_dashboard'){echo'current';} ?>"> <span class='app-menu-name'><i class="material-icons navIcon">dashboard</i>Dashboard</span></a></li>
+            <li><a href='<?php echo base_url() ?>index.php/restaurant/reviews' class="<?php if($currentPage=='business_reviews'){echo'current';} ?>"><span class='app-menu-name'><i class="material-icons navIcon">forum</i>Reviews</span></a></li>
+            <li><a href='<?php echo base_url() ?>index.php/restaurant/menu' class="<?php if($currentPage=='menu'){echo'current';} ?>"><span class='app-menu-name'><i class="material-icons navIcon">restaurant_menu</i>Menu</span></a></li>
+            <li><a href='<?php echo base_url() ?>index.php/restaurant/info' class="<?php if($currentPage=='info'){echo'current';} ?>"><span class='app-menu-name'><i class="material-icons navIcon">store</i>Info</span></a></li>
           <?php }
           else { ?>
-            <li><a href='<?php echo base_url() ?>index.php/user/profilea' class="<?php if($currentPage=='admin_profile'){echo'current';} ?>"> <span class='app-menu-name'>Account</span></a></li>
-            <li><a href='<?php echo base_url() ?>index.php/about' class="<?php if($currentPage=='about'){echo'current';} ?>"> <span class='app-menu-name'>About</span></a></li>
-            <li><a href='<?php echo base_url() ?>index.php/user/logout'><span class='app-menu-name'>Log out</span></a></li>
-          <?php }
-        }
+            <li><a href='<?php echo base_url() ?>index.php/admin/dashboard' class="<?php if($currentPage=='admin_profile'){echo'current';} ?>"><span class='app-menu-name'><i class="material-icons navIcon">assessment</i>Analytics</span></a></li>
+            <li><a href='<?php echo base_url() ?>index.php/admin/users' class="<?php if($currentPage=='users'){echo'current';} ?>"><span class='app-menu-name'><i class="material-icons navIcon">people</i>Users</span></a></li>
+          <?php } ?>
+            <li><a href='<?php echo base_url() ?>index.php/user/logout'><span class='app-menu-name'><i class="material-icons navIcon">lock_open</i>Log out</span></a></li>>
+        <?php
+				}
 
         ?>
 
       </ul>
 
     </nav>
-		
+				
 		<div class="pageWrap">
 

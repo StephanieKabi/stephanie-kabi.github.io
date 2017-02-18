@@ -28,7 +28,7 @@ class Signup extends CI_Controller {
 		else {
 		 $data = array(
 			 'page_heading' => 'Sign Up',
-			 'panel_title_1' => 'Create An Account',
+			 'panel_title_1' => 'Create Your Account.',
 			 'currentPage' => 'login'
 		 );
 		 $this->load->view('templates/header',$data);
@@ -52,27 +52,25 @@ class Signup extends CI_Controller {
 		$mail->Host = 'smtp.gmail.com'; // "ssl://smtp.gmail.com" didn't worked
 		$mail->Port = 587;
 		$mail->SMTPSecure = 'tls';
-		$mail->Username = "hello.foodie17@gmail.com";
-		$mail->Password = "b1nabri@nca";
+		$mail->Username = "hello.delischi@gmail.com";
+		$mail->Password = "Hell0delischi";
 
 //		$mail->IsHTML(true); // if you are going to send HTML formatted emails
 		$mail->SingleTo = true; // if you want to send a same email to multiple users. multiple emails will be sent one-by-one.
 
-		$mail->From = "hello.foodie17@gmail.com";
-		$mail->FromName = "Foodie";
+		$mail->From = "hello.delischi@gmail.com";
+		$mail->FromName = "Delischi";
 
 		$mail->addAddress($emailaddress);
 //	$mail->addAddress("user.2@gmail.com","User 2");
 //	$mail->addCC("user.3@ymail.com","User 3");
 //	$mail->addBCC("user.4@in.com","User 4");
 
-		$mail->Subject = "Welcome to MySite!";
+		$mail->Subject = "Welcome to Delischi!";
 		$mail->Body = /*-----------email body starts-----------*/
 			'Thanks for signing up, '.$firstName.'!
 			
-			Your account has been created.
-                        
-      Please click this link to activate your account:
+			Your account has been created. Please click this link to verify yoyr email:
             
       '.base_url().'index.php/signup/verify?email='.$emailaddress.'&hash='.$hash;
 		/*-----------email body ends-----------*/		      
@@ -93,7 +91,7 @@ class Signup extends CI_Controller {
 			if( $dbhash == $hash ){  //check whether the input hash value matches the hash value retrieved from the database
 				$this->user_model->verify_user($emailaddress); //update the status of the user as verified
 				/*---Now you can redirect the user to whatever page you want---*/
-				$this->session->set_tempdata('emailAddressConfirmation', '<div class="alert alert-success">Your account has been verified.</div>');
+				$this->session->set_tempdata('emailAddressConfirmation', '<div class="alert alert-success">Your email has been verified.</div>');
 				redirect('index.php/login','refresh');
 			}
 		}
@@ -142,13 +140,20 @@ class Signup extends CI_Controller {
 					'username' => $firstName."".$lastName."".microtime(),
 					'usertypeid' => $this->input->post('accountType')
 				);
-				
+				/*
 				if (isset($_FILES['image'])) {
-					$upload_directory = "C:/wamp64/www/Delischi/uploadedImages/profile";
+					$upload_directory = base_url()."uploadedImages/profile";
 					$tmp_name = $_FILES[ 'image' ][ 'tmp_name' ];
 					$file_name = $_FILES[ 'image' ][ 'name' ];
 					move_uploaded_file($tmp_name, "$upload_directory/$file_name");
 					$user['imagepath'] = $file_name;
+				}
+				*/
+				if (isset($_FILES['image'])) {
+					$uploaded_file_name = $_FILES[ 'image' ][ 'name' ];
+					//$file_path = base_url()."uploadedImages/profile/".$uploaded_file_name;
+					$file_path = "C:/wamp64/www/Delischi/uploadedImages/profile/".$uploaded_file_name;
+					move_uploaded_file( $_FILES['image']['tmp_name'], $file_path );
 				}
 				$emailaddress = strtolower($this->input->post('inputEmail'));
 				$encpassword = generate_random_salt($confirmPass,10);

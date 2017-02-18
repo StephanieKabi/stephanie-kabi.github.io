@@ -72,11 +72,18 @@ if(isset($_SESSION['logged_in_user_id'])) {
               <span>
 								<i class="material-icons red">place</i> <br> <small><h7>VISITED</h7></small> <h4>'.$number_places_visited.'</h4>
               </span>
+							';
+						if ( ( ($number_dishes_eaten==0)and($number_places_visited==0)and($number_cuisines_eaten==0) ) or ($number_cuisines_eaten>0) ) {
+							echo '
               <span>
 								<i class="material-icons red">restaurant_menu</i> <br> <small><h7>CUISINES</h7></small> <h4>'.$number_cuisines_eaten.'</h4>
               </span>
+            	';
+						}
+						
+						echo '
             </div>
-            ';
+						';
           }
           ?>
 

@@ -10,9 +10,17 @@ class Dish_model extends CI_Model {
   }
 	
 	
+	public function get_total_dishes() {
+		$query = $this->db->query("select count(*) as totaldishes from dish");
+		if($query->num_rows()>0) {
+      return $query->result();
+    }
+	}
+	
+	
 	public function get_explore_search($searchTerm) {
 		$query = $this->db->query("	
-		select dish.dishname, count(comment.dishlistingid) as totalcomments, count(CASE WHEN comment.sentimenttype = 'positive' THEN 1 END) as totallikes, count(CASE WHEN comment.sentimenttype = 'neutral' THEN 1 END) as totaneutrals, count(CASE WHEN comment.sentimenttype = 'negative' THEN 1 END) as totaldislikes, restaurant.restaurantid, restaurant.restaurantname, restaurant.vicinity, min(comment.imagename) as imagename, dish_type.dishtype, dish_listing.dishlistingid from comment join dish_listing on comment.dishlistingid = dish_listing.dishlistingid join dish on dish.dishid = dish_listing.dishid join restaurant on restaurant.restaurantid = dish_listing.restaurantid left join dish_type on dish_listing.dishtypeid = dish_type.dishtypeid where restaurant.restaurantname like '%".$searchTerm."%' or dish.dishname like '%".$searchTerm."%' GROUP by dish.dishname, restaurant.restaurantid, dish_listing.dishlistingid ORDER by dish.dishname
+		select dish.dishname, count(comment.dishlistingid) as totalcomments, count(CASE WHEN comment.sentimenttype = 'positive' THEN 1 END) as totallikes, count(CASE WHEN comment.sentimenttype = 'neutral' THEN 1 END) as totaneutrals, count(CASE WHEN comment.sentimenttype = 'negative' THEN 1 END) as totaldislikes, restaurant.restaurantid, restaurant.restaurantname, restaurant.vicinity, min(comment.imagename) as imagename, dish_type.dishtype, dish_listing.dishlistingid from comment join dish_listing on comment.dishlistingid = dish_listing.dishlistingid join dish on dish.dishid = dish_listing.dishid join restaurant on restaurant.restaurantid = dish_listing.restaurantid left join dish_type on dish_listing.dishtypeid = dish_type.dishtypeid where restaurant.restaurantname like '%".$searchTerm."%' or restaurant.vicinity like '%".$searchTerm."%' or dish.dishname like '%".$searchTerm."%' GROUP by dish.dishname, restaurant.restaurantid, dish_listing.dishlistingid ORDER by dish.dishname
 		");
 		if($query->num_rows()>0) {
       return $query->result();
@@ -42,7 +50,7 @@ class Dish_model extends CI_Model {
         $dishname = $row->dishname;
         $restaurantid = $row->restaurantid;
 				$query = $this->db->query("
-					select min(comment.imagename) as imagename, dish.dishname, restaurant.restaurantname, dish_listing.dishlistingid, sum(dish_listing.likes) as totallikes from comment join dish_listing on comment.dishlistingid = dish_listing.dishlistingid join dish on dish_listing.dishid = dish.dishid join restaurant on dish_listing.restaurantid = restaurant.restaurantid where dish_listing.dishlistingid not in ('".$dishlistingid."') and MATCH(dishname) AGAINST('".$dishname."') GROUP by dish.dishid, restaurant.restaurantid, dish_listing.dishlistingid order by totallikes DESC limit 3
+					select min(comment.imagename) as imagename, dish.dishname, count(comment.dishlistingid) as totalcomments, count(CASE WHEN comment.sentimenttype = 'positive' THEN 1 END) as totallikes, count(CASE WHEN comment.sentimenttype = 'neutral' THEN 1 END) as totaneutrals, count(CASE WHEN comment.sentimenttype = 'negative' THEN 1 END) as totaldislikes, restaurant.restaurantname, restaurant.vicinity, dish_type.dishtype, dish_listing.dishlistingid, sum(dish_listing.likes) as totallikes from comment join dish_listing on comment.dishlistingid = dish_listing.dishlistingid join dish on dish_listing.dishid = dish.dishid join restaurant on dish_listing.restaurantid = restaurant.restaurantid left join dish_type on dish_listing.dishtypeid = dish_type.dishtypeid  where dish_listing.dishlistingid not in ('".$dishlistingid."') and MATCH(dishname) AGAINST('".$dishname."') GROUP by dish.dishid, restaurant.restaurantid, dish_listing.dishlistingid order by totallikes DESC limit 6
 				");
 				if($query->num_rows()>0) {
 					return $query->result();

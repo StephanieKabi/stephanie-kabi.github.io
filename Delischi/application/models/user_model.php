@@ -10,6 +10,14 @@ class User_model extends CI_Model {
   }
 	
 	
+	public function get_total_users() {
+		$query = $this->db->query("select count(*) as totalusers from user");
+		if($query->num_rows()>0) {
+      return $query->result();
+    }
+	}
+	
+	
 	public function delete_user($userid) {
 		$this->db->where('userid', $userid);
 		$this->db->delete('login_credentials');
